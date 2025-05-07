@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateScheduleRequest {
-  private Long id;
+  private int grade;
+  private int classNumber;
   private int dayOfWeek;
   private int period;
   private String subjectName;

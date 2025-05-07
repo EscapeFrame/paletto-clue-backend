@@ -2,30 +2,20 @@ package hello.cluebackend.domain.schdule.service;
 
 import hello.cluebackend.domain.schdule.domain.Schedule;
 import hello.cluebackend.domain.schdule.domain.repository.ScheduleRepository;
-import hello.cluebackend.domain.schdule.presentation.dto.request.UpdateScheduleRequest;
-import hello.cluebackend.domain.schdule.presentation.dto.response.UpdateScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CommandScheduleService {
   private final ScheduleRepository scheduleRepository;
 
+  public Schedule updateSubjectName(int grade, int classNumber, int dayOfWeek, int period, String subjectName) {
+    Schedule schedule = scheduleRepository
+            .findByGradeAndClassNumberAndDayOfWeekAndPeriod(grade, classNumber, dayOfWeek, period)
+            .orElseThrow(() -> new IllegalArgumentException("해당 조건에 맞는 시간표가 없습니다."));
 
-  public UpdateScheduleResponse updateSchedule(List<UpdateScheduleRequest> updateScheduleRequestsList) {
-    for (UpdateScheduleRequest req : updateScheduleRequestsList) {
-      Schedule schedule  = scheduleRepository.findById(req.getId())
-              .orElseThrow(() -> new IllegalArgumentException("해당 ID의 시간표가 없습니다: " + req.getId()));
-
-      schedule.setDayOfWeek(req.getDayOfWeek());
-      schedule.setPeriod(req.getPeriod());
-      schedule.setSubjectName(req.getSubjectName());
-
-      scheduleRepository.save(schedule);
-    }
-    return new UpdateScheduleResponse(true);
+    schedule.setSubjectName(subjectName);
+    return scheduleRepository.save(schedule);
   }
 }

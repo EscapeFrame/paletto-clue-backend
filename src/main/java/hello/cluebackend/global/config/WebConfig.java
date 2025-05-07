@@ -1,4 +1,4 @@
-package hello.cluebackend.config;
+package hello.cluebackend.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
