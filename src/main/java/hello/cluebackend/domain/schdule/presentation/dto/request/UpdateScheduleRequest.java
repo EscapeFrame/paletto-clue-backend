@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UpdateScheduleRequest {
   @NotNull(message = "반은 필수 입력값입니다")
-  private Integer classNumber;
+  private Integer classNumber; //학년 반  ex) 1학년 1반 -> 11, 1학년 2반 -> 12
 
   @NotBlank(message = "요일은 필수 입력값입니다")
   private Integer dayOfWeek;
