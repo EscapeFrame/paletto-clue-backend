@@ -1,6 +1,6 @@
 package hello.cluebackend.global.exception;
 
-import com.oauth2jwt.web.user.dto.RegisterUserDTO;
+import hello.cluebackend.domain.user.presentation.dto.RegisterUserDTO;
 
 public class RedirectToRegistrationException extends RuntimeException {
     private final RegisterUserDTO registerUserDTO;

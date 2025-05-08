@@ -1,7 +1,7 @@
 package hello.cluebackend.global.config;
 
-import com.oauth2jwt.common.exception.RedirectToRegistrationException;
-import com.oauth2jwt.web.user.dto.RegisterUserDTO;
+import hello.cluebackend.domain.user.presentation.dto.RegisterUserDTO;
+import hello.cluebackend.global.exception.RedirectToRegistrationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

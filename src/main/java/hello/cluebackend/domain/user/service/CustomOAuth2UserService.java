@@ -1,9 +1,10 @@
 package hello.cluebackend.domain.user.service;
 
-import com.oauth2jwt.common.exception.RedirectToRegistrationException;
-import com.oauth2jwt.domain.user.entity.UserEntity;
-import com.oauth2jwt.domain.user.repository.UserRepository;
-import com.oauth2jwt.web.user.dto.*;
+
+import hello.cluebackend.domain.user.domain.UserEntity;
+import hello.cluebackend.domain.user.domain.repository.UserRepository;
+import hello.cluebackend.domain.user.presentation.dto.*;
+import hello.cluebackend.global.exception.RedirectToRegistrationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -65,9 +66,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         }
         else {
-            existData.setUsername(username);
             existData.setEmail(oAuth2Response.getEmail());
-            existData.setName(oAuth2Response.getName());
+            existData.setUsername(oAuth2Response.getName());
 
             userRepository.save(existData);
 

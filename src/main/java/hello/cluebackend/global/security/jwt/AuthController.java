@@ -1,6 +1,5 @@
 package hello.cluebackend.global.security.jwt;
 
-import com.oauth2jwt.domain.jwt.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;

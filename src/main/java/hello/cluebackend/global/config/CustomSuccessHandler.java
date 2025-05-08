@@ -1,7 +1,7 @@
 package hello.cluebackend.global.config;
 
-import com.oauth2jwt.domain.jwt.service.RefreshTokenService;
-import com.oauth2jwt.web.user.dto.CustomOAuth2User;
+import hello.cluebackend.domain.user.presentation.dto.CustomOAuth2User;
+import hello.cluebackend.global.security.jwt.RefreshTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
