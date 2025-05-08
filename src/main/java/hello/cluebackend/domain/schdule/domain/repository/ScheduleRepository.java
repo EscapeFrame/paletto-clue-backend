@@ -9,8 +9,14 @@ import java.util.Optional;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-  List<Schedule> findByGradeAndClassNumberAndDayOfWeek(int grade, int classNumber, int dayOfWeek);
-  List<Schedule> findByGradeAndClassNumber(int grade, int classNumber);
+  List<Schedule> findByGradeAndClassNumberAndDayOfWeek(int classNumber, int dayOfWeek);
+  List<Schedule> findByGradeAndClassNumber(int classNumber);
 
-  Optional<Schedule> findByGradeAndClassNumberAndDayOfWeekAndPeriod(int grade, int classNumber, int dayOfWeek, int period);
+  Optional<Schedule> findByGradeAndClassNumberAndDayOfWeekAndPeriod(
+          Integer classNumber, Integer dayOfWeek, Integer period);
+
+  List<Schedule> findByGradeAndClassNumber(Integer classNumber);
+
+  boolean existsByGradeAndClassNumberAndDayOfWeekAndPeriod(
+          Integer classNumber, Integer dayOfWeek, Integer period);
 }

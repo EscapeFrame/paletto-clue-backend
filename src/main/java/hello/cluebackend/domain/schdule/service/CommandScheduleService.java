@@ -2,6 +2,7 @@ package hello.cluebackend.domain.schdule.service;
 
 import hello.cluebackend.domain.schdule.domain.Schedule;
 import hello.cluebackend.domain.schdule.domain.repository.ScheduleRepository;
+import hello.cluebackend.domain.schdule.presentation.dto.response.UpdateScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +11,21 @@ import org.springframework.stereotype.Service;
 public class CommandScheduleService {
   private final ScheduleRepository scheduleRepository;
 
-  public Schedule updateSubjectName(int grade, int classNumber, int dayOfWeek, int period, String subjectName) {
+  public Schedule updateSubjectName(UpdateScheduleResponse response) {
     Schedule schedule = scheduleRepository
-            .findByGradeAndClassNumberAndDayOfWeekAndPeriod(grade, classNumber, dayOfWeek, period)
+            .findByGradeAndClassNumberAndDayOfWeekAndPeriod(
+                    response.getGrade(),
+                    response.getClassNumber(),
+                    response.getDayOfWeek(),
+                    response.getPeriod()
+            )
             .orElseThrow(() -> new IllegalArgumentException("해당 조건에 맞는 시간표가 없습니다."));
 
-    schedule.setSubjectName(subjectName);
-    return scheduleRepository.save(schedule);
+    schedule.setSubjectName(response.getSubjectName());
+    schedule.setTeacherName(response.getTeacherName());
+
+    scheduleRepository.save(schedule);
+
+    return schedule;
   }
 }
