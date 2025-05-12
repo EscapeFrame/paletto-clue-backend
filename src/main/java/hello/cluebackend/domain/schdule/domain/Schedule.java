@@ -13,7 +13,7 @@ import lombok.Setter;
 public class Schedule {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long Id;
+  private Long id;
 
   //학년 반  ex ) 1학년 1반 -> 11
   @Column(nullable = false)

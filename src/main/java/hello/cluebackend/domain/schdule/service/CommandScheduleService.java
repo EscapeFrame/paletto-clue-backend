@@ -13,8 +13,7 @@ public class CommandScheduleService {
 
   public Schedule updateSubjectName(UpdateScheduleResponse response) {
     Schedule schedule = scheduleRepository
-            .findByGradeAndClassNumberAndDayOfWeekAndPeriod(
-                    response.getGrade(),
+            .findByClassNumberAndDayOfWeekAndPeriod(
                     response.getClassNumber(),
                     response.getDayOfWeek(),
                     response.getPeriod()

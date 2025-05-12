@@ -1,32 +1,19 @@
 spring:
   application:
-    name: CLUE-Backend
+    name: CLUE-Backend             # 애플리케이션 이름
+
   datasource:
     url: jdbc:postgresql://localhost:5432/clue
     username: clue1234
     password: clue52025
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver  # PostgreSQL 드라이버
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: true                # 실행되는 SQL 출력
     hibernate:
-      ddl-auto: update
-
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope:
-              - email
-              - profile
+      ddl-auto: update            # 테이블 자동 생성 및 업데이트 (개발 시에만 권장)
 
 server:
-  address: 0.0.0.0
-  port: 8080
-
-app:
-  cors:
-    allowed-origins: http://0.0.0.0:3000
+  address: 0.0.0.0                # 외부 접속 허용 (보통 도커 내부나 클라우드 환경에서 사용)
+  port: 8080                     # 서버 포트

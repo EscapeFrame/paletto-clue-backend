@@ -1,7 +1,7 @@
 package hello.cluebackend.domain.schdule.service;
 
 import hello.cluebackend.domain.schdule.domain.repository.ScheduleRepository;
-import hello.cluebackend.domain.schdule.presentation.dto.DaySchedule;
+import hello.cluebackend.domain.schdule.presentation.dto.response.GetScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 public class QueryScheduleService {
   private final ScheduleRepository repository;
 
-  // 일 단위 시간표 반환
-  public List<DaySchedule> getDailySchedule(int grade, int classNumber, int dayOfWeek) {
-    return repository.findByGradeAndClassNumberAndDayOfWeek(grade, classNumber, dayOfWeek)
+  // 주 단위 시간표 반환
+  public List<GetScheduleResponse> getWeeklySchedule(Integer classNumber) {
+    return repository.findByClassNumber(classNumber)
             .stream()
-            .map(DaySchedule::fromEntity)
+            .map(GetScheduleResponse::fromEntity)
             .collect(Collectors.toList());
   }
 
-  // 주 단위 시간표 반환
-  public List<DaySchedule> getWeeklySchedule(int grade, int classNumber) {
-    return repository.findByGradeAndClassNumber(grade, classNumber)
+  // 일 단위 시간표 반환
+  public List<GetScheduleResponse> getDailySchedule(Integer classNumber, Integer dayOfWeek) {
+    return repository.findByClassNumberAndDayOfWeek(classNumber, dayOfWeek)
             .stream()
-            .map(DaySchedule::fromEntity)
+            .map(GetScheduleResponse::fromEntity)
             .collect(Collectors.toList());
   }
 }
