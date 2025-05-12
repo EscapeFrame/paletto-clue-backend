@@ -1,6 +1,6 @@
 package hello.cluebackend.domain.schdule.presentation;
 import hello.cluebackend.domain.schdule.service.QueryScheduleService;
-import hello.cluebackend.domain.schdule.presentation.dto.DaySchedule;
+import hello.cluebackend.domain.schdule.presentation.dto.response.GetScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,21 +14,19 @@ public class QueryScheduleController {
   private final QueryScheduleService scheduleService;
 
   // 일주일 시간표 반환
-  @GetMapping(params = {"grade", "classNumber"})
-  public List<DaySchedule> getWeeklySchedule(
-          @RequestParam int grade,
-          @RequestParam int classNumber
+  @GetMapping("/week")
+  public List<GetScheduleResponse> getWeeklySchedule(
+          @RequestParam Integer classNumber
   ) {
-    return scheduleService.getWeeklySchedule(grade, classNumber);
+    return scheduleService.getWeeklySchedule(classNumber);
   }
 
   // 하루 시간표 반환
-  @GetMapping(params = {"grade", "classNumber", "dayOfWeek"})
-  public List<DaySchedule> getDailySchedule(
-          @RequestParam int grade,
-          @RequestParam int classNumber,
-          @RequestParam int dayOfWeek
+  @GetMapping("/day")
+  public List<GetScheduleResponse> getDailySchedule(
+          @RequestParam Integer classNumber,
+          @RequestParam Integer dayOfWeek
   ) {
-    return scheduleService.getDailySchedule(grade, classNumber, dayOfWeek);
+    return scheduleService.getDailySchedule(classNumber, dayOfWeek);
   }
 }
