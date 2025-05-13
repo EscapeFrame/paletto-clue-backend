@@ -20,13 +20,13 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: checklist
+  - type: textarea
+    id: user_tasks
     attributes:
-      label: 할 일
-      description: 기능 구현을 위해 필요한 작업을 나열해주세요.
-      options:
-        - label: 할 일 1
+      label: 할 일을 직접 입력하세요
+      description:
+        예: 로그인 기능 구현, DB 설계 등
+      placeholder: 할 일 1\n할 일 2\n할 일 3
 
   - type: input
     id: due_date
