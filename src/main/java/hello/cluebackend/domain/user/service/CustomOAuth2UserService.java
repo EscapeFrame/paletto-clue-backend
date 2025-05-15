@@ -47,7 +47,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String username = oAuth2Response.getName();
         username = username.substring(2);
 
-        Optional<UserEntity> existDataOptional = userRepository.findByUsername(username);
+        Optional<UserEntity> existDataOptional = userRepository.findByEmail(email);
 
         if(existDataOptional.isEmpty()) {
             UserDTO userDTO = new UserDTO();
@@ -60,15 +60,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         UserEntity existData = existDataOptional.get();
+        System.out.println("STUDENT ID 55 : " + existData.getStudentId());
         existData.setEmail(oAuth2Response.getEmail());
         existData.setUsername(oAuth2Response.getName());
         userRepository.save(existData);
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(username);
-        userDTO.setRole(existData.getRole());
-        userDTO.setStudentId(existData.getStudentId());
-
+        UserDTO userDTO = existData.toUserDTO();
+        System.out.println("STUDENT ID 66 : " + userDTO.getStudentId());
         return new CustomOAuth2User(userDTO);
     }
 
