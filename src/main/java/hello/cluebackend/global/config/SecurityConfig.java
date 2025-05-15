@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -25,13 +26,11 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
-    private final CustomFailureHandler customFailureHandler;
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTUtil jwtUtil, CustomFailureHandler customFailureHandler) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTUtil jwtUtil) {
         this.customOAuth2UserService = customOAuth2UserService;
         this.customSuccessHandler = customSuccessHandler;
         this.jwtUtil = jwtUtil;
-        this.customFailureHandler = customFailureHandler;
     }
 
     @Bean
@@ -103,28 +102,33 @@ public class SecurityConfig {
         http
                 // JWT 토큰 만료시 다시 로그인을 할 경우 JWT 토큰이 없어서 거절하게 되어 무한루프에 빠지게 됨
 //                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-            .addFilterBefore(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
 //        .addFilterAfter(new JWTFilter(jwtUtil),OAuth2LoginAuthenticationFilter.class);
 
         // oauth2
         http
 //                .oauth2Login(Customizer.withDefaults());
-            .oauth2Login(oauth2 -> oauth2
-                    .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                            .userService(customOAuth2UserService))
-                    .successHandler(customSuccessHandler)
-                    .failureHandler(customFailureHandler));
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService))
+                        .successHandler(customSuccessHandler));
 
         // 경로별 인가 작업
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "refresh-token").permitAll()
+                        .requestMatchers("/", "refresh-token", "/register", "/first-register").permitAll()
                         .anyRequest().authenticated());
 
-        // 세션 설정 : STATELESS
+
         http
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .securityMatcher("/first-register", "/register")
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
+                .securityMatcher("/**")
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
         return http.build();
     }

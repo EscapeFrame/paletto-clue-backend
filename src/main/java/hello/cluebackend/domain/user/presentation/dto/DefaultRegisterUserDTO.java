@@ -8,4 +8,5 @@ import lombok.Setter;
 public class DefaultRegisterUserDTO {
     private String email;
     private String username;
+    private int studentId;
 }

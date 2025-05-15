@@ -4,12 +4,13 @@ package hello.cluebackend.domain.user.service;
 import hello.cluebackend.domain.user.domain.UserEntity;
 import hello.cluebackend.domain.user.domain.repository.UserRepository;
 import hello.cluebackend.domain.user.presentation.dto.*;
-import hello.cluebackend.global.exception.RedirectToRegistrationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
@@ -36,48 +37,39 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = null;
-        if(registrationId.equals("naver")) {
-            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-        }
-        else if(registrationId.equals("google")) {
+        if(registrationId.equals("google")) {
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
         }
         else {
             return null;
         }
 
-        // 리소스 서버에서 발급 받은 정보로 사용자를 배정할 아이디값을 만듦
-        String username = oAuth2Response.getProvider()+" "+oAuth2Response.getName();
-        UserEntity existData = userRepository.findByUsername(username);
+        String username = oAuth2Response.getName();
+        username = username.substring(2);
 
-        if(existData == null) {
-            RegisterUserDTO registerUserDTO = new RegisterUserDTO();
-            registerUserDTO.setUsername(oAuth2Response.getName());
-            registerUserDTO.setEmail(oAuth2Response.getEmail());
+        Optional<UserEntity> existDataOptional = userRepository.findByUsername(username);
 
-            throw new RedirectToRegistrationException(registerUserDTO);
-//
-//            UserDTO userDTO = new UserDTO();
-//            userDTO.setUsername(username);
-//            userDTO.setName(oAuth2Response.getName());
-//            userDTO.setRole("ROLE_USER");
-//
-//            return new CustomOAuth2User(userDTO);
-
-        }
-        else {
-            existData.setEmail(oAuth2Response.getEmail());
-            existData.setUsername(oAuth2Response.getName());
-
-            userRepository.save(existData);
-
+        if(existDataOptional.isEmpty()) {
             UserDTO userDTO = new UserDTO();
+            userDTO.setEmail(oAuth2Response.getEmail());
             userDTO.setUsername(username);
-            userDTO.setName(oAuth2Response.getName());
-            userDTO.setRole(existData.getRole());
+            userDTO.setRole("ROLE_USER");
+            userDTO.setStudentId(-1);
 
             return new CustomOAuth2User(userDTO);
         }
+
+        UserEntity existData = existDataOptional.get();
+        existData.setEmail(oAuth2Response.getEmail());
+        existData.setUsername(oAuth2Response.getName());
+        userRepository.save(existData);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(username);
+        userDTO.setRole(existData.getRole());
+        userDTO.setStudentId(existData.getStudentId());
+
+        return new CustomOAuth2User(userDTO);
     }
 
 }

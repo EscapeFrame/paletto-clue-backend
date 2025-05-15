@@ -2,6 +2,7 @@ package hello.cluebackend.domain.user.service;
 
 import hello.cluebackend.domain.user.domain.UserEntity;
 import hello.cluebackend.domain.user.domain.repository.UserRepository;
+import hello.cluebackend.domain.user.presentation.dto.DefaultRegisterUserDTO;
 import hello.cluebackend.domain.user.presentation.dto.RegisterUserDTO;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,9 @@ public class RegisterUserService {
         this.userRepository = userRepository;
     }
 
-    public void registerUser(RegisterUserDTO registerUserDTO) {
-        UserEntity userEntity = new UserEntity(registerUserDTO.getStudentId(), registerUserDTO.getUsername(), registerUserDTO.getEmail(), "ROLE_USER");
+    public void registerUser(DefaultRegisterUserDTO userDTO) {
+        System.out.println("StudentId : " + userDTO.getStudentId());
+        UserEntity userEntity = new UserEntity(userDTO.getStudentId(), userDTO.getUsername(), userDTO.getStudentId()+userDTO.getUsername(), userDTO.getEmail(), "ROLE_USER");
         userRepository.save(userEntity);
     }
 }

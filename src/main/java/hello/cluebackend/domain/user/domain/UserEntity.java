@@ -1,25 +1,28 @@
 package hello.cluebackend.domain.user.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "UserEntity")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ColumnDefault("-1")
     private int studentId;
 
     private String username;
@@ -28,9 +31,15 @@ public class UserEntity {
 
     private String role;
 
-    public UserEntity(int studentId, String username, String email, String role) {
+    private String addition;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    public UserEntity(int studentId, String username, String addition, String email, String role) {
         this.studentId = studentId;
         this.username = username;
+        this.addition = addition;
         this.email = email;
         this.role = role;
     }

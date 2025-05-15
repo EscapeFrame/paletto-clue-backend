@@ -2,27 +2,41 @@ package hello.cluebackend.domain.user.presentation;
 
 import hello.cluebackend.domain.user.presentation.dto.DefaultRegisterUserDTO;
 import hello.cluebackend.domain.user.presentation.dto.RegisterUserDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import hello.cluebackend.domain.user.presentation.dto.UserDTO;
+import hello.cluebackend.domain.user.service.RegisterUserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/register")
+@RestController
 public class RegisterController {
 
-    @GetMapping
-    public DefaultRegisterUserDTO showRegistrationForm(@RequestParam("username") String username,
-                                                       @RequestParam("email") String email) {
-        DefaultRegisterUserDTO registerUserDTO = new DefaultRegisterUserDTO();
-        registerUserDTO.setUsername(username);
-        registerUserDTO.setEmail(email);
-        return registerUserDTO;
+    private final RegisterUserService registerUserService;
+
+    public RegisterController(RegisterUserService registerUserService) {
+        this.registerUserService = registerUserService;
     }
 
-    @PostMapping
-    public String processRegistration(RegisterUserDTO registerUserDTO) {
+    @PostMapping("/first-register")
+    public UserDTO showRegistrationForm(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        UserDTO dto = (UserDTO) session.getAttribute("firstUser");
+        session.removeAttribute("firstUser");
+        return dto;
+    }
 
-        return "redirect:/";
+    @PostMapping(
+            value = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> processRegistration(@RequestBody DefaultRegisterUserDTO defaultRegisterUserDTO) {
+        System.out.println("StudentID 1 : " + defaultRegisterUserDTO.getStudentId());
+        registerUserService.registerUser(defaultRegisterUserDTO);
+        System.out.println("User registered successfully!");
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

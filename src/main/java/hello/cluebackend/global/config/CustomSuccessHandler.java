@@ -1,6 +1,7 @@
 package hello.cluebackend.global.config;
 
 import hello.cluebackend.domain.user.presentation.dto.CustomOAuth2User;
+import hello.cluebackend.domain.user.presentation.dto.UserDTO;
 import hello.cluebackend.global.security.jwt.RefreshTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -31,23 +32,37 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
-        String username = customUserDetails.getUsername();
+        UserDTO userDTO = customUserDetails.getUserDTO();
 
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
+        int studentId = userDTO.getStudentId();
+        System.out.println("studentId : " + studentId);
+        if (studentId == -1) {
+            request.getSession().setAttribute("firstUser", userDTO);
+
+            getRedirectStrategy().sendRedirect(
+                    request,
+                    response,
+                    "http://localhost:3000/register"
+            );
+        } else {
+            String username = customUserDetails.getUsername();
+
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+            GrantedAuthority auth = iterator.next();
+            String role = auth.getAuthority();
 
 
-        String access = jwtUtil.createJwt("access", username, role, 60*60*1000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role,7 * 24  * 60 * 60 * 1000L);
+            String access = jwtUtil.createJwt("access", username, role, 60*60*1000L);
+            String refresh = jwtUtil.createJwt("refresh", username, role,7 * 24  * 60 * 60 * 1000L);
 
-        refreshTokenService.saveRefreshToken(refresh, username);
-        response.setHeader("Authorization", "Bearer " + access);
-        response.addCookie(createCookie("refresh_token", refresh));
-        System.out.println(username + "님 로그인 성공");
-        response.setStatus(HttpStatus.OK.value());
-        response.sendRedirect("http://localhost:3000/");
+            refreshTokenService.saveRefreshToken(refresh, username);
+            response.setHeader("Authorization", "Bearer " + access);
+            response.addCookie(createCookie("refresh_token", refresh));
+            System.out.println(username + "님 로그인 성공");
+            response.setStatus(HttpStatus.OK.value());
+            response.sendRedirect("http://localhost:3000/");
+        }
     }
 
 
