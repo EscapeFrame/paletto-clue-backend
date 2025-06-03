@@ -1,6 +1,6 @@
 name: Bug Report
 description: 버그 발생 시 이 템플릿을 사용해 제보해주세요.
-title: "[BUG] "
+title: "[BUG]"
 labels: ["bug"]
 assignees: []
 
