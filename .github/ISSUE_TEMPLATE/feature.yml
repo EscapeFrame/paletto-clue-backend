@@ -16,7 +16,6 @@ body:
     attributes:
       label: 기능 설명
       description: 추가하고 싶은 기능에 대해 설명해주세요.
-      placeholder: 
     validations:
       required: true
 
@@ -32,4 +31,3 @@ body:
     attributes:
       label: 담당자
       description: 이 기능을 담당할 GitHub 사용자명을 입력해주세요.
-      placeholder: 
