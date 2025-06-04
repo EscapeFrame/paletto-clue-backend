@@ -20,9 +20,6 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
 
-<<<<<<< HEAD
-  
-=======
   redis:
     image: redis
     container_name: my_redis
@@ -30,11 +27,7 @@ services:
       - web-net
     ports:
       - "6379:6379"
-<<<<<<< HEAD
->>>>>>> feat/#2
-=======
 
 networks:
   web-net:
     external: true
->>>>>>> feat/#2
