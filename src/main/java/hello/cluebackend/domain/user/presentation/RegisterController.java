@@ -20,18 +20,16 @@ public class RegisterController {
         this.registerUserService = registerUserService;
     }
 
-<<<<<<< HEAD
     @PostMapping
     public String processRegistration(RegisterUserDTO registerUserDTO) {
         return "redirect:/";
-=======
+    }
     @PostMapping("/first-register")
     public UserDTO showRegistrationForm(HttpServletRequest request) {
         HttpSession session = request.getSession();
         UserDTO dto = (UserDTO) session.getAttribute("firstUser");
         session.removeAttribute("firstUser");
         return dto;
->>>>>>> feat/#2
     }
 
     @PostMapping(
@@ -44,5 +42,4 @@ public class RegisterController {
         System.out.println("User registered successfully!");
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }
