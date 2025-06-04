@@ -19,12 +19,8 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("refresh token refresh token refresh token refresh token refresh token ");
         try {
-            System.out.println("refresh token refresh token refresh token refresh token refresh token ");
-
             refreshTokenService.reissueRefreshToken(request, response);
-
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (AuthenticationCredentialsNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -1,7 +1,16 @@
 services:
+  spring:
+    build: .
+    container_name: paletto
+    networks:
+      - web-net
+    ports:
+      - 8080:8080
   postgres:
     image: postgres:15
     container_name: my_postgres
+    networks:
+      - web-net
     ports:
       - "5432:5432"
     environment:
@@ -14,5 +23,11 @@ services:
   redis:
     image: redis
     container_name: my_redis
+    networks:
+      - web-net
     ports:
       - "6379:6379"
+
+networks:
+  web-net:
+    external: true

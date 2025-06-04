@@ -35,10 +35,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserDTO userDTO = customUserDetails.getUserDTO();
 
         int studentId = userDTO.getStudentId();
-        System.out.println("studentId : " + studentId);
         if (studentId == -1) {
             request.getSession().setAttribute("firstUser", userDTO);
-
+            System.out.println(userDTO.getUsername() + "님 회원가입 성공");
             getRedirectStrategy().sendRedirect(
                     request,
                     response,
