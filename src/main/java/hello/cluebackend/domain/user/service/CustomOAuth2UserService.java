@@ -60,13 +60,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         UserEntity existData = existDataOptional.get();
-        System.out.println("STUDENT ID 55 : " + existData.getStudentId());
         existData.setEmail(oAuth2Response.getEmail());
         existData.setUsername(oAuth2Response.getName());
         userRepository.save(existData);
 
         UserDTO userDTO = existData.toUserDTO();
-        System.out.println("STUDENT ID 66 : " + userDTO.getStudentId());
         return new CustomOAuth2User(userDTO);
     }
 

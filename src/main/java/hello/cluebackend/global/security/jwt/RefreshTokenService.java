@@ -26,10 +26,6 @@ public class RefreshTokenService {
         System.out.println(refreshTokenRepository.existsById(refreshToken));
     }
 
-    public RefreshToken findByRefreshToken(String refreshToken) {
-        return refreshTokenRepository.findById(refreshToken).orElse(null);
-    }
-
     public boolean existsByRefresh(String refreshToken) {
         return refreshTokenRepository.existsById(refreshToken);
     }
