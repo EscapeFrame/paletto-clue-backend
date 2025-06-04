@@ -21,7 +21,6 @@ public class RegisterController {
 
     @PostMapping
     public String processRegistration(RegisterUserDTO registerUserDTO) {
-
         return "redirect:/";
     }
 
