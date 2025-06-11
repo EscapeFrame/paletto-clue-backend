@@ -34,9 +34,10 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no build/libs/*.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/app/app.jar
 
-      - name: Restart Spring App on EC2
+      - name: Restart App with Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            pkill -f 'java -jar' || true
-            nohup java -jar /home/${{ secrets.EC2_USER }}/app/app.jar > /home/${{ secrets.EC2_USER }}/app/app.log 2>&1 &
+            cd /home/${{ secrets.EC2_USER }}/app
+            docker compose down
+            docker compose up -d --build
           EOF
